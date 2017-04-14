@@ -1,0 +1,62 @@
+{
+    "cmd": null,
+    "id": "cluster1-2048-bamboo",
+    "cpus": 0.1,
+    "mem": 512,
+    "instances": 1,
+    "constraints": [
+        [
+            "vcluster",
+            "LIKE",
+            "cluster1"
+        ],
+        [
+            "hostname",
+            "UNIQUE"
+        ],
+        [
+            "hostname",
+            "CLUSTER",
+            "192.168.1.214"
+            ]
+    ],
+    "container": {
+        "volumes": [
+         {
+            "hostPath": "/data/haproxy",
+            "containerPath": "/etc/haproxy",
+            "mode": "RW"
+         }
+        ],
+        "docker": {
+            "parameters": [],
+            "network": "HOST",
+            "portMappings": [],
+            "image": "offlineregistry.dataman-inc.com:5000/library/omega-bamboo:omega.v3.0.4"
+        }
+    },
+    "uris": [],
+    "healthChecks": [
+        {
+            "port": 8000,
+            "path": "/",
+            "maxConsecutiveFailures": 3,
+            "protocol": "TCP",
+            "gracePeriodSeconds": 300,
+            "intervalSeconds": 60,
+            "timeoutSeconds": 30
+        }
+    ],
+    "env": {
+        "MARATHON_ENDPOINT": "http://192.168.1.213:8080",
+        "BAMBOO_ENDPOINT": "http://192.168.1.214:8000",
+        "BAMBOO_ZK_HOST": "192.168.1.213:2181",
+        "MARATHON_USE_EVENT_STREAM": "true",
+        "BAMBOO_ZK_PATH": "/bb_gateway",
+        "HAPROXY_PORT": "5005",
+        "HAPROXY_UI_PORT": "5091",
+        "APPLICATION_ID": "cluster1-2048",
+        "BIND": ":8000",
+        "CONFIG_PATH": "config/production.json"
+    }
+}

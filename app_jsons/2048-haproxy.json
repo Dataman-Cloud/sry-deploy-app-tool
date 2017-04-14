@@ -1,0 +1,53 @@
+{
+    "id": "cluster1-2048-haproxy",
+    "cmd": null,
+    "cpus": 0.1,
+    "mem": 512,
+    "instances": 1,
+    "constraints": [
+        [
+            "vcluster",
+            "LIKE",
+            "cluster1"
+        ],
+        [
+            "hostname",
+            "UNIQUE"
+        ],
+        [
+            "hostname",
+            "CLUSTER",
+            "192.168.1.214"
+        ]
+    ],
+    "container": {
+        "volumes": [
+         {
+            "hostPath": "/data/haproxy/cluster1-2048",
+            "containerPath": "/etc/haproxy",
+            "mode": "RW"
+         }
+        ],
+        "docker": {
+            "parameters": [],
+            "network": "HOST",
+            "portMappings": [],
+            "image": "offlineregistry.dataman-inc.com:5000/library/omega-haproxyctl:omega.v2.4.2"
+        }
+    },
+    "uris": [],
+    "healthChecks": [
+        {
+            "port": 5091,
+            "maxConsecutiveFailures": 3,
+            "protocol": "TCP",
+            "gracePeriodSeconds": 300,
+            "intervalSeconds": 60,
+            "timeoutSeconds": 30
+        }
+    ],
+    "env": {
+        "BIND": "0.0.0.0:5005",
+	"CONFIG_PATH": "/config/production.json"
+    }
+}
