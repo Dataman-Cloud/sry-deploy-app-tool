@@ -150,12 +150,13 @@ PASSWORD="Admin1234"					 #修改为实际的密码
 ```
 1.准备好bamboo，haproxy，app发布的json文件
 2.cd /data/sry-deploy-app-tool/
-python deployApp.py -U http://192.168.1.213:5013 -B ./app_jsons/2048-bamboo.json -H ./app_jsons/2048-haproxy.json -A ./app_jsons/2048.json
+python deployApp.py -U http://192.168.1.213:5013 -B ./app_jsons/2048-bamboo.json -H ./app_jsons/2048-haproxy.json -A ./app_jsons/2048.json -M swan
 
 命令行参数解析：
 -U 数人云平台地址，baseurl
 -B 指定bamboo json文件，可以指定多个，指定多个以逗号分隔，不指定则不进行bamboo的发布
 -H 指定haproxy json文件，可以指定多个，指定多个以逗号分隔，不指定则不进行haproxy的发布
 -A 指定发布的服务（比如2048等）json文件，可以指定多个，指定多个以逗号分隔，不指定则不发布
+-M 指定发布swan|marathon版本的应用
 
 ```

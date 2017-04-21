@@ -1,0 +1,18 @@
+{
+  "appName": "ecshopdb",
+  "cmd": null,
+  "cpus": 0.1,
+  "mem": 256,
+  "disk": 0,
+  "instances": 1,
+  "mode": "replicates",
+  "runAs": "admin",
+  "constraints": "equal vcluster cluster1",
+  "container": {
+    "docker": {
+      "image": "offlineregistry.dataman-inc.com:5000/library/ecshop-db",
+      "network": "host"
+    },
+    "type": "DOCKER"
+  }
+}

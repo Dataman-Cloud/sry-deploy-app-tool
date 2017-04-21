@@ -1,0 +1,24 @@
+{
+  "appName": "ecshop",
+  "cmd": null,
+  "cpus": 0.1,
+  "mem": 1024,
+  "disk": 0,
+  "instances": 1,
+  "mode": "replicates",
+  "runAs": "admin",
+  "constraints": "equal vcluster cluster1",
+  "container": {
+    "docker": {
+      "image": "offlineregistry.dataman-inc.com:5000/library/ecshop",
+      "network": "host",
+      "parameters": [
+          {
+    "key":"add-host",
+    "value":"ecshopdb:192.168.1.234"
+  }
+        ]
+    },
+    "type": "DOCKER"
+  }
+}

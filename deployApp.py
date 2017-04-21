@@ -14,18 +14,21 @@ def getArgs():
     parse.add_argument('-B',type=str,default="",help="指定获取bamboo json文件路径，以逗号分隔")
     parse.add_argument('-H',type=str,default="",help="指定获取haproxy json文件路径,以逗号分隔")
     parse.add_argument('-A',type=str,default="",help="指定获取app json文件路径,以逗号分隔")
+    parse.add_argument('-M',type=str,default="swan",help="指定发布swan|marathon应用,默认swan")
     return parse.parse_args()
 
 
 #发布应用
-def deployApp(jFileList,token,baseurl):
+def deployApp(jFileList,token,baseurl,dmode):
     for i in jFileList:
         if os.path.exists(i):
             getJsonCmd =  r'cat ' + i
             (status,json) = commands.getstatusoutput(getJsonCmd)
             if status == 0:
-                callAPICmd = r"curl -X POST -H 'Authorization: " + token + r"' " + baseurl + r"/v1/apps -d '" + json + r"'"
-                print(callAPICmd)
+                if dmode == "marathon":
+                    callAPICmd = r"curl -X POST -H 'Authorization: " + token + r"' " + baseurl + r"/v1/apps -d '" + json + r"'"
+                else:
+                    callAPICmd = r"curl -X POST -H 'Authorization: " + token + r"' " + baseurl + r"/v2/apps -d '" + json + r"'"
                 (status,result) = commands.getstatusoutput(callAPICmd)
                 if status == 0:
                     print("result is: %s" % result)
@@ -38,7 +41,7 @@ def deployApp(jFileList,token,baseurl):
         else:
             print("%s file not exist!" % i)
 	    continue
-        time.sleep(5)
+        time.sleep(15)
 
 
 if __name__=='__main__':
@@ -47,6 +50,7 @@ if __name__=='__main__':
     haproxys=args.H
     apps=args.A
     baseurl=args.U
+    dmode=args.M
     
     #获取token，若获取失败退出
     getTokenCmd = r'sh get_token.sh'
@@ -58,12 +62,12 @@ if __name__=='__main__':
 	#发布bamboo
         if len(bamboos) != 0:
             bambooList = bamboos.split(",")
-            deployApp(bambooList,token,baseurl)
+            deployApp(bambooList,token,baseurl,dmode)
         #发布haproxy
 	if len(haproxys) != 0:
             haproxyList = haproxys.split(",")
-            deployApp(haproxyList,token,baseurl)
+            deployApp(haproxyList,token,baseurl,dmode)
 	#发布app
         if len(apps) != 0:
             appList = apps.split(",")
-            deployApp(appList,token,baseurl)
+            deployApp(appList,token,baseurl,dmode)
